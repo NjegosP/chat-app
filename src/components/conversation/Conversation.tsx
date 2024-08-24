@@ -1,63 +1,25 @@
-import React, { useCallback, useRef, useState } from 'react';
 import { HandThumbUpIcon, PaperAirplaneIcon } from '@heroicons/react/24/solid';
+import { FormEvent, FormEventHandler, useCallback, useRef, useState } from 'react';
+import type { MessageType } from '../../data/data';
+import { conversations } from '../../data/data';
 import Message from './Message/Message';
+import { Reply } from './Reply/Reply';
 
 const userId = 1;
 
-const conversation = [
-  { senderId: 1, message: "Hey there! How's it going? 😊", isLiked: false, id: 1 },
-  { senderId: 2, message: "Hi! I'm doing well, thanks. What about you? 😃", isLiked: false, id: 2 },
-  { senderId: 1, message: "I'm good, just a bit busy with work lately. 😅", isLiked: false, id: 3 },
-  { senderId: 1, message: 'I’ve been working late nights and weekends. 😓', isLiked: false, id: 4 },
-  { senderId: 1, message: 'It’s been really exhausting, but I’m pushing through.', isLiked: false, id: 5 },
-  { senderId: 2, message: 'That sounds really tough. Do you get any time to relax?', isLiked: false, id: 6 },
-  { senderId: 2, message: 'Maybe taking a short break or a walk could help. 🌳', isLiked: false, id: 7 },
-  { senderId: 1, message: 'I’ve been trying to fit in some breaks, but it’s tough.', isLiked: false, id: 8 },
-  { senderId: 1, message: 'I might take a walk today if I can. 🚶‍♂️', isLiked: false, id: 9 },
-  {
-    senderId: 2,
-    message: 'That sounds like a good idea! Even a brief walk can be refreshing. 🌟',
-    isLiked: false,
-    id: 10,
-  },
-  { senderId: 1, message: 'Thanks for the suggestion!', isLiked: false, id: 11 },
-  { senderId: 2, message: 'By the way, I’ve started a new hobby recently. 🎨', isLiked: false, id: 12 },
-  { senderId: 2, message: "I've been painting, and it's been really relaxing. 😊", isLiked: false, id: 13 },
-  { senderId: 2, message: 'It’s been a great way to unwind after a busy day.', isLiked: false, id: 14 },
-  { senderId: 1, message: 'That sounds amazing! I’ve always wanted to try painting.', isLiked: false, id: 15 },
-  { senderId: 1, message: 'Do you have any tips for beginners?', isLiked: false, id: 16 },
-  {
-    senderId: 2,
-    message: 'Start with simple subjects and enjoy the process. Don’t worry about perfection.',
-    isLiked: false,
-    id: 17,
-  },
-  { senderId: 2, message: 'It’s all about having fun and experimenting! 🎨', isLiked: false, id: 18 },
-  { senderId: 1, message: 'Thanks for the tips! I’ll definitely keep that in mind.', isLiked: false, id: 19 },
-  { senderId: 2, message: 'You’re welcome! If you need more advice, just let me know. 😄', isLiked: false, id: 20 },
-  { senderId: 1, message: 'I will. Let’s catch up again soon. 😊', isLiked: false, id: 21 },
-  { senderId: 2, message: 'Sounds good! I’ll be here. 👋', isLiked: true, id: 22 },
-  { senderId: 1, message: 'Bye for now!', isLiked: true, id: 23 },
-  { senderId: 1, message: 'Have a great day! 😊', isLiked: false, id: 24 }, // Consecutive messages from sender 1
-  { senderId: 2, message: 'You too! 😃', isLiked: false, id: 25 },
-  { senderId: 2, message: 'Looking forward to our next chat!', isLiked: false, id: 26 },
-  { senderId: 1, message: 'Me too. Talk soon!', isLiked: false, id: 27 },
-  { senderId: 2, message: 'Absolutely! Bye for now!', isLiked: false, id: 28 },
-  { senderId: 1, message: 'Bye! 😊', isLiked: false, id: 29 },
-  { senderId: 2, message: 'Catch you later!', isLiked: false, id: 30 },
-  { senderId: 1, message: 'Definitely. Have a great day!', isLiked: false, id: 31 },
-  { senderId: 2, message: 'You too! 😄', isLiked: true, id: 32 },
-  { senderId: 2, message: '😄', isLiked: false, id: 33 },
-];
-
 export const Conversation = () => {
-  const [messages, setMessages] = useState(conversation);
+  const [messages, setMessages] = useState(conversations[0].messages);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleSubmit = (newMessage) => {
+  const handleSubmit = (newMessage: MessageType) => {
     setMessages((prev) => [...prev, newMessage]);
-    setTimeout(() => containerRef?.current.scrollIntoView({ behavior: 'smooth', block: 'end' }));
+    setTimeout(() => containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }));
   };
+
+  // useLayoutEffect(() => {
+  //   //temporary solution
+  //   setTimeout(() => containerRef.current?.scrollIntoView({ behavior: 'auto', block: 'end' }), 300);
+  // }, []);
 
   const handleLike = useCallback((id) => {
     setMessages((prev) => {
@@ -76,7 +38,7 @@ export const Conversation = () => {
       ref={containerRef}
       className="w-full bg-[#2c374d] flex flex-col"
     >
-      <div className="flex flex-col flex-1 m-1 items-end px-3">
+      <ul className="flex flex-col flex-1 m-1 items-end px-3">
         {messages.map(({ message, senderId, isLiked, id }, idx) => (
           <Message
             key={id}
@@ -88,27 +50,35 @@ export const Conversation = () => {
             handleLike={handleLike}
           />
         ))}
-        {/* <div ></div> */}
-      </div>
+      </ul>
       <MessageBox handleSubmit={handleSubmit} />
     </div>
   );
 };
 
-const MessageBox = ({ handleSubmit }) => {
+const MessageBox = ({
+  handleSubmit,
+  reply,
+}: {
+  handleSubmit: (newMessage: MessageType) => void;
+  reply?: MessageType;
+}) => {
   const [currentMessage, setCurrentMessage] = useState('');
+  const [showReply, setShowReply] = useState(false);
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!currentMessage) return;
-    handleSubmit({ message: currentMessage, senderId: userId });
+    handleSubmit({ message: currentMessage, senderId: userId, isLiked: false, isReply: false, id: 505 });
     setCurrentMessage('');
+    setShowReply(false);
   };
 
-  const addLike = () => handleSubmit({ message: '👍', senderId: userId });
+  const addLike = () => handleSubmit({ message: '👍', senderId: userId, isLiked: false, isReply: false, id: 404 });
 
   return (
     <div className="sticky bottom-0">
+      {showReply && <Reply message={reply.message} />}
       <form onSubmit={onSubmit}>
         <div className="h-[60px] bg-[#1F293B] flex w-full">
           <input

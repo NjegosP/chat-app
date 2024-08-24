@@ -1,31 +1,37 @@
-import React from 'react';
+export type Contact = {
+  name: string;
+  lastMessage: string;
+  conversationId: number;
+  userId: number;
+  avatarUrl: string;
+};
 
-const users = [
+const users: Contact[] = [
   {
     name: 'Alice',
     lastMessage: "Hey there! How's it going? 😊",
-    conversationId: 'conv1',
+    conversationId: 500,
     userId: 1,
     avatarUrl: 'https://xsgames.co/randomusers/avatar.php?g=female',
   },
   {
     name: 'Bob',
     lastMessage: "Hi! I'm doing well, thanks. What about you? 😃",
-    conversationId: 'conv1',
+    conversationId: 501,
     userId: 2,
     avatarUrl: 'https://xsgames.co/randomusers/avatar.php?g=male',
   },
   {
     name: 'Charlie',
     lastMessage: "Just finishing up a big project. It's taking a lot of time.",
-    conversationId: 'conv2',
+    conversationId: 502,
     userId: 3,
     avatarUrl: 'https://xsgames.co/randomusers/avatar.php?g=male',
   },
   {
     name: 'Diana',
     lastMessage: 'Wow, that sounds cool. What kind of AI?',
-    conversationId: 'conv2',
+    conversationId: 503,
     userId: 4,
     avatarUrl: 'https://xsgames.co/randomusers/avatar.php?g=female',
   },
@@ -48,7 +54,7 @@ export const Contacts = () => {
   );
 };
 
-const Contact = ({ src, name, lastMessage }) => (
+const Contact = ({ src, name, lastMessage }: { src: string; name: string; lastMessage: string }) => (
   <div className="mh-2 mb-2 p-3 hover:bg-[#17233f] rounded-md flex flex-row">
     <Avatar src={src} />
     <LastMessage
@@ -58,7 +64,7 @@ const Contact = ({ src, name, lastMessage }) => (
   </div>
 );
 
-const Avatar = ({ src }) => (
+const Avatar = ({ src }: { src: string }) => (
   <div className="min-w-[50px]">
     <img
       src={src}
@@ -67,7 +73,7 @@ const Avatar = ({ src }) => (
   </div>
 );
 
-const LastMessage = ({ name, lastMessage }) => (
+const LastMessage = ({ name, lastMessage }: { name: string; lastMessage: string }) => (
   <div className="flex-col px-3 overflow-hidden hidden sm:flex">
     <div className="flex flex-row justify-between">
       <div className="text-sm font-bold text-sky-500">{name}</div>
