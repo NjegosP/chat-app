@@ -1,8 +1,17 @@
 import { ChatBubbleOvalLeftIcon, HeartIcon } from '@heroicons/react/24/solid';
-import React, { memo, useState } from 'react';
+import { memo, useState } from 'react';
+import type { MessageType } from '../../../data/data';
 
-const Message = ({ text, senderId, prevMessage, isLiked, handleLike, id }) => {
-  console.log('render');
+type Props = {
+  text: string;
+  senderId: number;
+  prevMessage: MessageType;
+  isLiked: boolean;
+  handleLike: (id: number) => void;
+  id: number;
+};
+
+const Message = ({ text, senderId, prevMessage, isLiked, handleLike, id }: Props) => {
   const [isReplyHidden, setIsReplyHidden] = useState(true);
   const isConsecutive = prevMessage && prevMessage?.senderId === senderId;
   const isUserMessage = senderId === 1;
@@ -20,11 +29,11 @@ const Message = ({ text, senderId, prevMessage, isLiked, handleLike, id }) => {
   };
 
   return (
-    <div
+    <li
       onMouseEnter={() => setIsReplyHidden(false)}
       onMouseLeave={() => setIsReplyHidden(true)}
       onDoubleClick={onDoubleClick}
-      className={`relative flex ${rowDirection} ${marginBottom} ${margin} w-fit max-w-[70%] ${messageAlignment} cursor-default select-none items-center`}
+      className={`relative flex ${rowDirection} ${marginBottom} ${margin} w-fit max-w-[70%] ${messageAlignment} cursor-default select-none items-center last:mb-4`}
     >
       <Reply isHidden={isReplyHidden} />
       <div className={`relative flex flex-col ${messageColor} text-sky-500 p-2 rounded-lg`}>
@@ -32,11 +41,11 @@ const Message = ({ text, senderId, prevMessage, isLiked, handleLike, id }) => {
         <div className={`${fontSize}`}>{text}</div>
         {isLiked && <Like isUserMessage={isUserMessage} />}
       </div>
-    </div>
+    </li>
   );
 };
 
-const Like = ({ isUserMessage }) => {
+const Like = ({ isUserMessage }: { isUserMessage: boolean }) => {
   const position = isUserMessage ? 'right-1' : 'left-1';
   return (
     <div className={`absolute -bottom-3 ${position} px-1 py-0.5 bg-[#0F172A] border-[#2c374d] rounded-lg`}>
@@ -45,12 +54,12 @@ const Like = ({ isUserMessage }) => {
   );
 };
 
-const Reply = ({ isHidden }) => {
-  const display = isHidden ? 'invisible' : '';
+const Reply = ({ isHidden }: { isHidden: boolean }) => {
+  const display = isHidden ? 'opacity-0' : 'opacity-100';
   return (
     <button
       type="button"
-      className={`p-1 mx-2 rounded-full bg-gray-600/30 ${display}`}
+      className={`p-1 mx-2 rounded-full bg-gray-600/30 ${display} transition-opacity`}
     >
       <ChatBubbleOvalLeftIcon className="size-4 text-sky-500" />
     </button>
