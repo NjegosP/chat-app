@@ -1,25 +1,27 @@
-import { HandThumbUpIcon, PaperAirplaneIcon } from '@heroicons/react/24/solid';
-import { FormEvent, FormEventHandler, useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import type { MessageType } from '../../data/data';
 import { conversations } from '../../data/data';
 import Message from './Message/Message';
+import { MessageBox } from './MessageBox/MessageBox';
 import { Reply } from './Reply/Reply';
-
-const userId = 1;
 
 export const Conversation = () => {
   const [messages, setMessages] = useState(conversations[0].messages);
+  const [isReply, setIsReply] = useState(false);
+  const [replyMessage, setReplyMessage] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = (newMessage: MessageType) => {
     setMessages((prev) => [...prev, newMessage]);
+    setIsReply(false);
+    setReplyMessage('');
     setTimeout(() => containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }));
   };
 
-  // useLayoutEffect(() => {
-  //   //temporary solution
-  //   setTimeout(() => containerRef.current?.scrollIntoView({ behavior: 'auto', block: 'end' }), 300);
-  // }, []);
+  const handleReply = (text: string) => {
+    setIsReply(true);
+    setReplyMessage(text);
+  };
 
   const handleLike = useCallback((id) => {
     setMessages((prev) => {
@@ -48,62 +50,14 @@ export const Conversation = () => {
             prevMessage={messages[idx - 1]}
             id={id}
             handleLike={handleLike}
+            handleReply={handleReply}
           />
         ))}
       </ul>
-      <MessageBox handleSubmit={handleSubmit} />
-    </div>
-  );
-};
-
-const MessageBox = ({
-  handleSubmit,
-  reply,
-}: {
-  handleSubmit: (newMessage: MessageType) => void;
-  reply?: MessageType;
-}) => {
-  const [currentMessage, setCurrentMessage] = useState('');
-  const [showReply, setShowReply] = useState(false);
-
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!currentMessage) return;
-    handleSubmit({ message: currentMessage, senderId: userId, isLiked: false, isReply: false, id: 505 });
-    setCurrentMessage('');
-    setShowReply(false);
-  };
-
-  const addLike = () => handleSubmit({ message: '👍', senderId: userId, isLiked: false, isReply: false, id: 404 });
-
-  return (
-    <div className="sticky bottom-0">
-      {showReply && <Reply message={reply.message} />}
-      <form onSubmit={onSubmit}>
-        <div className="h-[60px] bg-[#1F293B] flex w-full">
-          <input
-            placeholder="Type a message..."
-            className="flex-1 bg-[#2c374d] rounded-full mx-3 my-2 px-5 outline-none text-sky-500"
-            onChange={(e) => setCurrentMessage(e.target.value)}
-            value={currentMessage}
-          />
-          <button
-            className="px-3"
-            type="submit"
-          >
-            <PaperAirplaneIcon className="size-6 text-sky-500" />
-          </button>
-          <button
-            className="px-3"
-            type="button"
-          >
-            <HandThumbUpIcon
-              className="size-6 text-sky-500"
-              onClick={addLike}
-            />
-          </button>
-        </div>
-      </form>
+      <div className="sticky bottom-0">
+        {isReply && <Reply message={replyMessage} />}
+        <MessageBox handleSubmit={handleSubmit} />
+      </div>
     </div>
   );
 };

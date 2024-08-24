@@ -8,10 +8,11 @@ type Props = {
   prevMessage: MessageType;
   isLiked: boolean;
   handleLike: (id: number) => void;
+  handleReply: (text: string) => void;
   id: number;
 };
 
-const Message = ({ text, senderId, prevMessage, isLiked, handleLike, id }: Props) => {
+const Message = ({ text, senderId, prevMessage, isLiked, handleLike, handleReply, id }: Props) => {
   const [isReplyHidden, setIsReplyHidden] = useState(true);
   const isConsecutive = prevMessage && prevMessage?.senderId === senderId;
   const isUserMessage = senderId === 1;
@@ -35,7 +36,10 @@ const Message = ({ text, senderId, prevMessage, isLiked, handleLike, id }: Props
       onDoubleClick={onDoubleClick}
       className={`relative flex ${rowDirection} ${marginBottom} ${margin} w-fit max-w-[70%] ${messageAlignment} cursor-default select-none items-center last:mb-4`}
     >
-      <Reply isHidden={isReplyHidden} />
+      <ReplyBubble
+        isHidden={isReplyHidden}
+        onClick={() => handleReply(text)}
+      />
       <div className={`relative flex flex-col ${messageColor} text-sky-500 p-2 rounded-lg`}>
         {!isUserMessage && !isConsecutive && <div className="text-sm font-semibold text-[#E2E8F0] mb-1">John</div>}
         <div className={`${fontSize}`}>{text}</div>
@@ -54,12 +58,13 @@ const Like = ({ isUserMessage }: { isUserMessage: boolean }) => {
   );
 };
 
-const Reply = ({ isHidden }: { isHidden: boolean }) => {
+const ReplyBubble = ({ isHidden, onClick }: { isHidden: boolean; onClick: () => void }) => {
   const display = isHidden ? 'opacity-0' : 'opacity-100';
   return (
     <button
       type="button"
       className={`p-1 mx-2 rounded-full bg-gray-600/30 ${display} transition-opacity`}
+      onClick={onClick}
     >
       <ChatBubbleOvalLeftIcon className="size-4 text-sky-500" />
     </button>
