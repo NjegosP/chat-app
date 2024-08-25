@@ -18,13 +18,12 @@ export const MessageBox = ({ handleSubmit }: Props) => {
       messageText: currentMessage,
       senderId: userId,
       isLiked: false,
-      id: Math.floor(Math.random() * 3000) + 1,
+      id: generateId(),
     });
     setCurrentMessage('');
   };
 
-  const addLikeEmoji = () =>
-    handleSubmit({ messageText: '👍', senderId: userId, isLiked: false, id: Math.floor(Math.random() * 3000) + 1 });
+  const addLikeEmoji = () => handleSubmit({ messageText: '👍', senderId: userId, isLiked: false, id: generateId() });
 
   return (
     <form onSubmit={onSubmit}>
@@ -54,3 +53,5 @@ export const MessageBox = ({ handleSubmit }: Props) => {
     </form>
   );
 };
+
+const generateId = () => Math.floor(Math.random() * 3000) + 1;

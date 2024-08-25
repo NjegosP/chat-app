@@ -2,8 +2,8 @@ import { ChatBubbleOvalLeftIcon, HeartIcon } from '@heroicons/react/24/solid';
 import { memo, useState } from 'react';
 import { useConversationContext } from '../../../contexts/ConversationContext';
 import type { MessageType } from '../../../data/data';
-import { ReplyMessage } from '../Reply/ReplyBox';
-import { isEmojiOnly } from '../../../utils/helpers';
+import { ReplyMessage } from '../ReplyMessage/ReplyMessage';
+import { getMessageStyles } from './helpers';
 
 type Props = {
   message: MessageType;
@@ -18,13 +18,12 @@ const Message = ({ message, prevMessage, handleLike, handleReply }: Props) => {
   const [isReplyHidden, setIsReplyHidden] = useState(true);
   const isConsecutive = prevMessage && prevMessage?.senderId === senderId;
   const isUserMessage = senderId === 1;
-  const messageAlignment = isUserMessage ? 'self-end' : 'self-start';
-  const messageColor = isUserMessage ? 'bg-[#0F172A]' : 'bg-[#17274b]';
-  const margin = isConsecutive ? 'mt-0.5' : 'mt-2';
-  const marginBottom = isLiked ? 'mb-3' : '';
-  const isEmoji = isEmojiOnly(messageText);
-  const fontSize = isEmoji ? 'text-5xl' : 'text-sm';
-  const rowDirection = isUserMessage ? 'flex-row' : 'flex-row-reverse';
+  const { messageAlignment, messageColor, margin, marginBottom, fontSize, rowDirection } = getMessageStyles({
+    isUserMessage,
+    isConsecutive,
+    isLiked,
+    messageText,
+  });
 
   const onDoubleClick = () => {
     if (isUserMessage) return;
@@ -36,7 +35,7 @@ const Message = ({ message, prevMessage, handleLike, handleReply }: Props) => {
       onMouseEnter={() => setIsReplyHidden(false)}
       onMouseLeave={() => setIsReplyHidden(true)}
       onDoubleClick={onDoubleClick}
-      className={`relative flex ${rowDirection} ${marginBottom} ${margin} w-fit max-w-[70%] ${messageAlignment} cursor-default select-none items-center last:mb-4`}
+      className={`relative flex w-fit max-w-[70%] ${rowDirection} ${marginBottom} ${margin}  ${messageAlignment} cursor-default select-none items-center last:mb-4`}
     >
       <ReplyBubble
         isHidden={isReplyHidden}
