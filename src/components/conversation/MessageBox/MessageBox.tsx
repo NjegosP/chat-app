@@ -14,11 +14,11 @@ export const MessageBox = ({ handleSubmit }: Props) => {
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!currentMessage) return;
-    handleSubmit({ message: currentMessage, senderId: userId, isLiked: false, isReply: false, id: 505 });
+    handleSubmit({ messageText: currentMessage, senderId: userId, isLiked: false, id: 505 });
     setCurrentMessage('');
   };
 
-  const addLike = () => handleSubmit({ message: '👍', senderId: userId, isLiked: false, isReply: false, id: 404 });
+  const addLike = () => handleSubmit({ messageText: '👍', senderId: userId, isLiked: false, id: 404 });
 
   return (
     <form onSubmit={onSubmit}>

@@ -1,18 +1,17 @@
 import { ChatBubbleOvalLeftIcon, HeartIcon } from '@heroicons/react/24/solid';
 import { memo, useState } from 'react';
 import type { MessageType } from '../../../data/data';
+import { ReplyMessage } from '../Reply/ReplyBox';
 
 type Props = {
-  text: string;
-  senderId: number;
+  message: MessageType;
   prevMessage: MessageType;
-  isLiked: boolean;
   handleLike: (id: number) => void;
-  handleReply: (text: string) => void;
-  id: number;
+  handleReply: (message: MessageType) => void;
 };
 
-const Message = ({ text, senderId, prevMessage, isLiked, handleLike, handleReply, id }: Props) => {
+const Message = ({ message, prevMessage, handleLike, handleReply }: Props) => {
+  const { id, senderId, messageText, isLiked, replyMessage } = message;
   const [isReplyHidden, setIsReplyHidden] = useState(true);
   const isConsecutive = prevMessage && prevMessage?.senderId === senderId;
   const isUserMessage = senderId === 1;
@@ -20,7 +19,7 @@ const Message = ({ text, senderId, prevMessage, isLiked, handleLike, handleReply
   const messageColor = isUserMessage ? 'bg-[#0F172A]' : 'bg-[#17274b]';
   const margin = isConsecutive ? 'mt-0.5' : 'mt-2';
   const marginBottom = isLiked ? 'mb-3' : '';
-  const isEmoji = isEmojiOnly(text);
+  const isEmoji = isEmojiOnly(messageText);
   const fontSize = isEmoji ? 'text-5xl' : 'text-sm';
   const rowDirection = isUserMessage ? 'flex-row' : 'flex-row-reverse';
 
@@ -38,11 +37,20 @@ const Message = ({ text, senderId, prevMessage, isLiked, handleLike, handleReply
     >
       <ReplyBubble
         isHidden={isReplyHidden}
-        onClick={() => handleReply(text)}
+        onClick={() => handleReply(message)}
       />
       <div className={`relative flex flex-col ${messageColor} text-sky-500 p-2 rounded-lg`}>
+        {replyMessage && (
+          <div className="mb-2">
+            <ReplyMessage
+              isUserMessage={replyMessage.senderId === 1}
+              message={replyMessage.messageText}
+              bgColor="bg-[#121e3b]"
+            />
+          </div>
+        )}
         {!isUserMessage && !isConsecutive && <div className="text-sm font-semibold text-[#E2E8F0] mb-1">John</div>}
-        <div className={`${fontSize}`}>{text}</div>
+        <div className={`${fontSize}`}>{messageText}</div>
         {isLiked && <Like isUserMessage={isUserMessage} />}
       </div>
     </li>

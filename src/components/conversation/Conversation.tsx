@@ -3,25 +3,27 @@ import type { MessageType } from '../../data/data';
 import { conversations } from '../../data/data';
 import Message from './Message/Message';
 import { MessageBox } from './MessageBox/MessageBox';
-import { Reply } from './Reply/Reply';
+import { ReplyBox } from './Reply/ReplyBox';
 
 export const Conversation = () => {
   const [messages, setMessages] = useState(conversations[0].messages);
-  const [isReply, setIsReply] = useState(false);
-  const [replyMessage, setReplyMessage] = useState('');
+  const [replyMessage, setReplyMessage] = useState(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = (newMessage: MessageType) => {
+    if (replyMessage) {
+      newMessage.replyMessage = replyMessage;
+    }
     setMessages((prev) => [...prev, newMessage]);
-    setIsReply(false);
     setReplyMessage('');
     setTimeout(() => containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }));
   };
 
-  const handleReply = (text: string) => {
-    setIsReply(true);
-    setReplyMessage(text);
+  const handleReply = (message: MessageType) => {
+    setReplyMessage(message);
   };
+
+  const onClearReply = () => setReplyMessage(null);
 
   const handleLike = useCallback((id) => {
     setMessages((prev) => {
@@ -41,21 +43,24 @@ export const Conversation = () => {
       className="w-full bg-[#2c374d] flex flex-col"
     >
       <ul className="flex flex-col flex-1 m-1 items-end px-3">
-        {messages.map(({ message, senderId, isLiked, id }, idx) => (
+        {messages.map((message, idx) => (
           <Message
-            key={id}
-            text={message}
-            senderId={senderId}
-            isLiked={isLiked}
+            key={message.id}
+            message={message}
             prevMessage={messages[idx - 1]}
-            id={id}
             handleLike={handleLike}
             handleReply={handleReply}
           />
         ))}
       </ul>
       <div className="sticky bottom-0">
-        {isReply && <Reply message={replyMessage} />}
+        {!!replyMessage && (
+          <ReplyBox
+            message={replyMessage.messageText}
+            isUserMessage={replyMessage.senderId === 1}
+            onClearReply={onClearReply}
+          />
+        )}
         <MessageBox handleSubmit={handleSubmit} />
       </div>
     </div>
