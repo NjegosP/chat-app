@@ -7,7 +7,7 @@ type Props = {
   contact: ContactType;
 };
 
-export const Contact = ({ contact }: Props) => {
+export const ContactItem = ({ contact }: Props) => {
   const { selectedContact, setSelectedContact } = useConversationContext();
 
   const { avatarUrl, name, lastMessage, conversationId } = contact;
