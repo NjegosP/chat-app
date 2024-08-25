@@ -1,13 +1,10 @@
-import React from 'react';
 import './App.css';
-import { Contacts } from './components/contacts/Contacts';
-import { Conversation } from './components/conversation/Conversation';
+import Chat from './Chat';
 
 function App() {
   return (
     <div className="flex flex-row min-h-dvh">
-      <Contacts />
-      <Conversation />
+      <Chat />
     </div>
   );
 }
