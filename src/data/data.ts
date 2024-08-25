@@ -465,28 +465,28 @@ export type ContactType = {
 export const contactData: ContactType[] = [
   {
     name: 'Alice',
-    lastMessage: "Hey there! How's it going? 😊",
+    lastMessage: 'Perfect. I’ll send over some time slots.',
     conversationId: 500,
     userId: 2,
     avatarUrl: 'https://xsgames.co/randomusers/avatar.php?g=female',
   },
   {
     name: 'Bob',
-    lastMessage: "Hi! I'm doing well, thanks. What about you? 😃",
+    lastMessage: 'Alright, I’m in.',
     conversationId: 501,
     userId: 3,
     avatarUrl: 'https://xsgames.co/randomusers/avatar.php?g=male',
   },
   {
     name: 'Charlie',
-    lastMessage: "Just finishing up a big project. It's taking a lot of time.",
+    lastMessage: 'Thank you! Same goes for you.',
     conversationId: 502,
     userId: 4,
     avatarUrl: 'https://xsgames.co/randomusers/avatar.php?g=male',
   },
   {
     name: 'Diana',
-    lastMessage: 'Wow, that sounds cool. What kind of AI?',
+    lastMessage: 'Perfect. Let’s do it.',
     conversationId: 503,
     userId: 5,
     avatarUrl: 'https://xsgames.co/randomusers/avatar.php?g=female',
