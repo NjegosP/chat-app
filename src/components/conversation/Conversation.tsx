@@ -1,13 +1,15 @@
-import { useCallback, useContext, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useConversation } from '../../api/hooks/useConversation';
-import { ConversationContext } from '../../Chat';
+import { useConversationContext } from '../../contexts/ConversationContext';
 import type { MessageType } from '../../data/data';
 import Message from './Message/Message';
 import { MessageBox } from './MessageBox/MessageBox';
 import { ReplyBox } from './Reply/ReplyBox';
+import { useContacts } from '../../api/hooks/useContacts';
 
 export const Conversation = () => {
-  const { selectedContact } = useContext(ConversationContext);
+  const { selectedContact } = useConversationContext();
+  const { updateLastMessage } = useContacts();
   const { conversation, isLoading, addNewMessage, likeMessage } = useConversation(selectedContact.conversationId);
   const [replyMessage, setReplyMessage] = useState(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -17,7 +19,8 @@ export const Conversation = () => {
       newMessage.replyMessage = replyMessage;
     }
     addNewMessage.mutate({ id: selectedContact?.conversationId, messages: [...conversation.messages, newMessage] });
-    setReplyMessage('');
+    updateLastMessage.mutate({ conversationId: selectedContact.conversationId, message: newMessage.messageText });
+
     setTimeout(() => containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }));
   };
 
@@ -65,7 +68,7 @@ export const Conversation = () => {
         )}
 
         <MessageBox
-          key={selectedContact.conversation}
+          key={selectedContact.conversationId}
           handleSubmit={handleSubmit}
         />
       </div>

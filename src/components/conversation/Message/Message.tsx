@@ -1,8 +1,8 @@
 import { ChatBubbleOvalLeftIcon, HeartIcon } from '@heroicons/react/24/solid';
-import { memo, useContext, useState } from 'react';
+import { memo, useState } from 'react';
+import { useConversationContext } from '../../../contexts/ConversationContext';
 import type { MessageType } from '../../../data/data';
 import { ReplyMessage } from '../Reply/ReplyBox';
-import { ConversationContext } from '../../../Chat';
 
 type Props = {
   message: MessageType;
@@ -13,7 +13,7 @@ type Props = {
 
 const Message = ({ message, prevMessage, handleLike, handleReply }: Props) => {
   const { senderId, messageText, isLiked, replyMessage } = message;
-  const { selectedContact } = useContext(ConversationContext);
+  const { selectedContact } = useConversationContext();
   const [isReplyHidden, setIsReplyHidden] = useState(true);
   const isConsecutive = prevMessage && prevMessage?.senderId === senderId;
   const isUserMessage = senderId === 1;

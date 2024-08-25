@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { ConversationContext } from '../../../Chat';
+import { useConversationContext } from '../../../contexts/ConversationContext';
 import type { ContactType } from '../../../data/data';
 import { Avatar } from './Avatar';
 import { LastMessage } from './LastMessage';
@@ -9,7 +8,7 @@ type Props = {
 };
 
 export const Contact = ({ contact }: Props) => {
-  const { selectedContact, setSelectedContact } = useContext(ConversationContext);
+  const { selectedContact, setSelectedContact } = useConversationContext();
 
   const { avatarUrl, name, lastMessage, conversationId } = contact;
   const isSelected = conversationId === selectedContact?.conversationId;
