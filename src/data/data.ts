@@ -453,3 +453,42 @@ export const conversations: Conversation[] = [
     ],
   },
 ];
+
+export type ContactType = {
+  name: string;
+  lastMessage: string;
+  conversationId: number;
+  userId: number;
+  avatarUrl: string;
+};
+
+export const contactData: ContactType[] = [
+  {
+    name: 'Alice',
+    lastMessage: "Hey there! How's it going? 😊",
+    conversationId: 500,
+    userId: 2,
+    avatarUrl: 'https://xsgames.co/randomusers/avatar.php?g=female',
+  },
+  {
+    name: 'Bob',
+    lastMessage: "Hi! I'm doing well, thanks. What about you? 😃",
+    conversationId: 501,
+    userId: 3,
+    avatarUrl: 'https://xsgames.co/randomusers/avatar.php?g=male',
+  },
+  {
+    name: 'Charlie',
+    lastMessage: "Just finishing up a big project. It's taking a lot of time.",
+    conversationId: 502,
+    userId: 4,
+    avatarUrl: 'https://xsgames.co/randomusers/avatar.php?g=male',
+  },
+  {
+    name: 'Diana',
+    lastMessage: 'Wow, that sounds cool. What kind of AI?',
+    conversationId: 503,
+    userId: 5,
+    avatarUrl: 'https://xsgames.co/randomusers/avatar.php?g=female',
+  },
+];
