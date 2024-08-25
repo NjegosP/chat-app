@@ -13,7 +13,7 @@ export type Conversation = {
 
 export const conversations: Conversation[] = [
   {
-    id: 1000,
+    id: 500,
     messages: [
       { id: 200, senderId: 1, messageText: 'Hey, how’s everything going?', isLiked: false },
       {
@@ -89,7 +89,7 @@ export const conversations: Conversation[] = [
     ],
   },
   {
-    id: 1001,
+    id: 501,
     messages: [
       { id: 220, senderId: 1, messageText: 'Hey, what’s up? 🎉', isLiked: false },
       { id: 221, senderId: 3, messageText: 'Not much, just chilling. You?', isLiked: false },
@@ -128,7 +128,7 @@ export const conversations: Conversation[] = [
     ],
   },
   {
-    id: 1002,
+    id: 502,
     messages: [
       { id: 243, senderId: 1, messageText: 'Hey, do you have a minute to chat?', isLiked: false },
       { id: 244, senderId: 4, messageText: 'Sure, what’s up?', isLiked: false },
@@ -185,7 +185,7 @@ export const conversations: Conversation[] = [
     ],
   },
   {
-    id: 1003,
+    id: 503,
     messages: [
       { id: 265, senderId: 1, messageText: 'Hey, long time no chat!', isLiked: false },
       { id: 266, senderId: 5, messageText: 'I know, right? How have you been?', isLiked: false },
@@ -237,7 +237,7 @@ export const conversations: Conversation[] = [
     ],
   },
   {
-    id: 1004,
+    id: 504,
     messages: [
       {
         id: 287,
@@ -274,7 +274,7 @@ export const conversations: Conversation[] = [
     ],
   },
   {
-    id: 1005,
+    id: 505,
     messages: [
       { id: 309, senderId: 1, messageText: 'Hey, have you heard the news?', isLiked: false },
       { id: 310, senderId: 7, messageText: 'No, what happened?', isLiked: false },
@@ -314,7 +314,7 @@ export const conversations: Conversation[] = [
     ],
   },
   {
-    id: 1006,
+    id: 506,
     messages: [
       {
         id: 329,
@@ -354,7 +354,7 @@ export const conversations: Conversation[] = [
     ],
   },
   {
-    id: 1007,
+    id: 507,
     messages: [
       {
         id: 344,
@@ -383,7 +383,7 @@ export const conversations: Conversation[] = [
     ],
   },
   {
-    id: 1008,
+    id: 508,
     messages: [
       { id: 358, senderId: 1, messageText: 'Hey, what’s the status on the project?', isLiked: false },
       {
@@ -423,7 +423,7 @@ export const conversations: Conversation[] = [
     ],
   },
   {
-    id: 1009,
+    id: 509,
     messages: [
       { id: 373, senderId: 1, messageText: 'Hey, just wanted to check in on you.', isLiked: false },
       { id: 374, senderId: 11, messageText: 'Thanks, I’m doing okay. How about you?', isLiked: false },
