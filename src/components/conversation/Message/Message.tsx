@@ -1,17 +1,19 @@
 import { ChatBubbleOvalLeftIcon, HeartIcon } from '@heroicons/react/24/solid';
-import { memo, useState } from 'react';
+import { memo, useContext, useState } from 'react';
 import type { MessageType } from '../../../data/data';
 import { ReplyMessage } from '../Reply/ReplyBox';
+import { ConversationContext } from '../../../Chat';
 
 type Props = {
   message: MessageType;
   prevMessage: MessageType;
-  handleLike: (id: number) => void;
+  handleLike: (message: MessageType) => void;
   handleReply: (message: MessageType) => void;
 };
 
 const Message = ({ message, prevMessage, handleLike, handleReply }: Props) => {
-  const { id, senderId, messageText, isLiked, replyMessage } = message;
+  const { senderId, messageText, isLiked, replyMessage } = message;
+  const { selectedContact } = useContext(ConversationContext);
   const [isReplyHidden, setIsReplyHidden] = useState(true);
   const isConsecutive = prevMessage && prevMessage?.senderId === senderId;
   const isUserMessage = senderId === 1;
@@ -25,7 +27,7 @@ const Message = ({ message, prevMessage, handleLike, handleReply }: Props) => {
 
   const onDoubleClick = () => {
     if (isUserMessage) return;
-    handleLike(id);
+    handleLike(message);
   };
 
   return (
@@ -45,11 +47,14 @@ const Message = ({ message, prevMessage, handleLike, handleReply }: Props) => {
             <ReplyMessage
               isUserMessage={replyMessage.senderId === 1}
               message={replyMessage.messageText}
+              contactName={selectedContact.name}
               bgColor="bg-[#121e3b]"
             />
           </div>
         )}
-        {!isUserMessage && !isConsecutive && <div className="text-sm font-semibold text-[#E2E8F0] mb-1">John</div>}
+        {!isUserMessage && !isConsecutive && (
+          <div className="text-sm font-semibold text-[#E2E8F0] mb-1">{selectedContact.name}</div>
+        )}
         <div className={`${fontSize}`}>{messageText}</div>
         {isLiked && <Like isUserMessage={isUserMessage} />}
       </div>

@@ -1,28 +1,22 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
+import { useConversation } from '../../api/hooks/useConversation';
+import { ConversationContext } from '../../Chat';
 import type { MessageType } from '../../data/data';
-import { conversations } from '../../data/data';
 import Message from './Message/Message';
 import { MessageBox } from './MessageBox/MessageBox';
 import { ReplyBox } from './Reply/ReplyBox';
-import { ConversationContext } from '../../Chat';
 
 export const Conversation = () => {
-  const { conversationId: selectedConversationId } = useContext(ConversationContext);
-  const [messages, setMessages] = useState(conversations[0].messages);
+  const { selectedContact } = useContext(ConversationContext);
+  const { conversation, isLoading, addNewMessage, likeMessage } = useConversation(selectedContact.conversationId);
   const [replyMessage, setReplyMessage] = useState(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (selectedConversationId === 501) {
-      setMessages(conversations[1].messages);
-    }
-  }, [selectedConversationId]);
 
   const handleSubmit = (newMessage: MessageType) => {
     if (replyMessage) {
       newMessage.replyMessage = replyMessage;
     }
-    setMessages((prev) => [...prev, newMessage]);
+    addNewMessage.mutate({ id: selectedContact?.conversationId, messages: [...conversation.messages, newMessage] });
     setReplyMessage('');
     setTimeout(() => containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }));
   };
@@ -33,17 +27,12 @@ export const Conversation = () => {
 
   const onClearReply = () => setReplyMessage(null);
 
-  const handleLike = useCallback((id) => {
-    setMessages((prev) => {
-      const updatedMessages = prev.map((message) => {
-        if (message.id === id) {
-          message.isLiked = true;
-        }
-        return message;
-      });
-      return updatedMessages;
-    });
-  }, []);
+  const handleLike = useCallback(
+    (message: MessageType) => {
+      likeMessage.mutate({ id: selectedContact?.conversationId, message });
+    },
+    [selectedContact?.conversationId],
+  );
 
   return (
     <div
@@ -51,15 +40,19 @@ export const Conversation = () => {
       className="w-full bg-[#2c374d] flex flex-col"
     >
       <ul className="flex flex-col flex-1 m-1 items-end px-3">
-        {messages.map((message, idx) => (
-          <Message
-            key={message.id}
-            message={message}
-            prevMessage={messages[idx - 1]}
-            handleLike={handleLike}
-            handleReply={handleReply}
-          />
-        ))}
+        {isLoading ? (
+          <p>is loading...</p>
+        ) : (
+          conversation.messages.map((message, idx) => (
+            <Message
+              key={message.id}
+              message={message}
+              prevMessage={conversation.messages[idx - 1]}
+              handleLike={handleLike}
+              handleReply={handleReply}
+            />
+          ))
+        )}
       </ul>
       <div className="sticky bottom-0">
         {!!replyMessage && (
@@ -67,11 +60,12 @@ export const Conversation = () => {
             message={replyMessage.messageText}
             isUserMessage={replyMessage.senderId === 1}
             onClearReply={onClearReply}
+            contactName={selectedContact.name}
           />
         )}
 
         <MessageBox
-          key={selectedConversationId}
+          key={selectedContact.conversation}
           handleSubmit={handleSubmit}
         />
       </div>

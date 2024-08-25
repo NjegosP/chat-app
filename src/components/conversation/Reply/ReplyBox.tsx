@@ -1,13 +1,14 @@
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
-type Props = { message: string; isUserMessage: boolean; onClearReply: () => void };
+type Props = { message: string; isUserMessage: boolean; contactName: string; onClearReply: () => void };
 
-export const ReplyBox = ({ message, isUserMessage, onClearReply }: Props) => {
+export const ReplyBox = ({ message, isUserMessage, contactName, onClearReply }: Props) => {
   return (
     <div className="bg-gray-800 pt-2 px-2 flex flex-row items-center">
       <ReplyMessage
         message={message}
         isUserMessage={isUserMessage}
+        contactName={contactName}
       />
       <button
         type="button"
@@ -24,16 +25,18 @@ export const ReplyMessage = ({
   message,
   isUserMessage,
   bgColor,
+  contactName,
 }: {
   message: string;
   isUserMessage: boolean;
   bgColor?: string;
+  contactName: string;
 }) => {
   const messageBorderColor = isUserMessage ? 'border-green-300' : 'border-teal-300';
   return (
     <div className={`flex-1 flex-col px-3 py-2 border-l-8  rounded-lg bg-gray-900/50 ${messageBorderColor} ${bgColor}`}>
       <div className="flex flex-row justify-between">
-        <div className="text-sm font-bold text-[#E2E8F0]">{isUserMessage ? 'You' : 'John'}</div>
+        <div className="text-sm font-bold text-[#E2E8F0]">{isUserMessage ? 'You' : contactName}</div>
       </div>
       <div className="max-h-12 py-1">
         <div className="text-sky-400 text-sm max-h-10 overflow-hidden">{message}</div>

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { ConversationContext } from '../../../Chat';
-import type { ContactType } from '../Contacts';
+import type { ContactType } from '../../../data/data';
 import { Avatar } from './Avatar';
 import { LastMessage } from './LastMessage';
 
@@ -9,14 +9,14 @@ type Props = {
 };
 
 export const Contact = ({ contact }: Props) => {
-  const { conversationId: selectedConversationId, setConversationId } = useContext(ConversationContext);
+  const { selectedContact, setSelectedContact } = useContext(ConversationContext);
+
   const { avatarUrl, name, lastMessage, conversationId } = contact;
-  const isSelected = conversationId === selectedConversationId;
+  const isSelected = conversationId === selectedContact?.conversationId;
   const backgroundColor = isSelected ? 'bg-[#17233f]' : '';
 
   const handleClick = () => {
-    console.log('CV s', conversationId, selectedConversationId);
-    return setConversationId(conversationId);
+    setSelectedContact(contact);
   };
 
   return (

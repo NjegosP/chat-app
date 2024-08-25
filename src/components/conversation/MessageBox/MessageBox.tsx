@@ -14,11 +14,17 @@ export const MessageBox = ({ handleSubmit }: Props) => {
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!currentMessage) return;
-    handleSubmit({ messageText: currentMessage, senderId: userId, isLiked: false, id: 505 });
+    handleSubmit({
+      messageText: currentMessage,
+      senderId: userId,
+      isLiked: false,
+      id: Math.floor(Math.random() * 3000) + 1,
+    });
     setCurrentMessage('');
   };
 
-  const addLike = () => handleSubmit({ messageText: '👍', senderId: userId, isLiked: false, id: 404 });
+  const addLikeEmoji = () =>
+    handleSubmit({ messageText: '👍', senderId: userId, isLiked: false, id: Math.floor(Math.random() * 3000) + 1 });
 
   return (
     <form onSubmit={onSubmit}>
@@ -41,7 +47,7 @@ export const MessageBox = ({ handleSubmit }: Props) => {
         >
           <HandThumbUpIcon
             className="size-6 text-sky-500"
-            onClick={addLike}
+            onClick={addLikeEmoji}
           />
         </button>
       </div>
