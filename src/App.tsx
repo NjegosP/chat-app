@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import './App.css';
 import Chat from './Chat';
 import { ConversationContextProvider } from './contexts/ConversationContext';
 
