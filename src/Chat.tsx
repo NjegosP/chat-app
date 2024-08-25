@@ -1,17 +1,28 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { Contacts } from './components/contacts/Contacts';
 import { Conversation } from './components/conversation/Conversation';
+import { contactData, ContactType } from './data/data';
+import { useContacts } from './api/hooks/useContacts';
 
 export const ConversationContext = createContext(null);
 
 const Chat = () => {
-  const [conversationId, setConversationId] = useState(500);
+  const { contacts } = useContacts();
+  const [selectedContact, setSelectedContact] = useState<ContactType>(contactData[0]);
+  const contextValue = { selectedContact, setSelectedContact };
 
-  const contextValue = { conversationId, setConversationId };
+  useEffect(() => {
+    if (contacts && !selectedContact) {
+      setSelectedContact(contacts[0]);
+    }
+  }, [contacts]);
+
   return (
     <ConversationContext.Provider value={contextValue}>
-      <Contacts />
-      <Conversation />
+      <div className="flex flex-row min-h-dvh">
+        <Contacts />
+        <Conversation />
+      </div>
     </ConversationContext.Provider>
   );
 };
