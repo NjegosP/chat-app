@@ -1,15 +1,12 @@
-import { createContext, useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useContacts } from './api/hooks/useContacts';
 import { Contacts } from './components/contacts/Contacts';
 import { Conversation } from './components/conversation/Conversation';
-import { contactData, ContactType } from './data/data';
-import { useContacts } from './api/hooks/useContacts';
-
-export const ConversationContext = createContext(null);
+import { useConversationContext } from './contexts/ConversationContext';
 
 const Chat = () => {
   const { contacts } = useContacts();
-  const [selectedContact, setSelectedContact] = useState<ContactType>(contactData[0]);
-  const contextValue = { selectedContact, setSelectedContact };
+  const { selectedContact, setSelectedContact } = useConversationContext();
 
   useEffect(() => {
     if (contacts && !selectedContact) {
@@ -18,12 +15,10 @@ const Chat = () => {
   }, [contacts]);
 
   return (
-    <ConversationContext.Provider value={contextValue}>
-      <div className="flex flex-row min-h-dvh">
-        <Contacts />
-        <Conversation />
-      </div>
-    </ConversationContext.Provider>
+    <div className="flex flex-row min-h-dvh">
+      <Contacts />
+      {selectedContact && <Conversation />}
+    </div>
   );
 };
 
