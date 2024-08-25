@@ -1,14 +1,22 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import type { MessageType } from '../../data/data';
 import { conversations } from '../../data/data';
 import Message from './Message/Message';
 import { MessageBox } from './MessageBox/MessageBox';
 import { ReplyBox } from './Reply/ReplyBox';
+import { ConversationContext } from '../../Chat';
 
 export const Conversation = () => {
+  const { conversationId: selectedConversationId } = useContext(ConversationContext);
   const [messages, setMessages] = useState(conversations[0].messages);
   const [replyMessage, setReplyMessage] = useState(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (selectedConversationId === 501) {
+      setMessages(conversations[1].messages);
+    }
+  }, [selectedConversationId]);
 
   const handleSubmit = (newMessage: MessageType) => {
     if (replyMessage) {
@@ -19,9 +27,9 @@ export const Conversation = () => {
     setTimeout(() => containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }));
   };
 
-  const handleReply = (message: MessageType) => {
+  const handleReply = useCallback((message: MessageType) => {
     setReplyMessage(message);
-  };
+  }, []);
 
   const onClearReply = () => setReplyMessage(null);
 
@@ -61,7 +69,11 @@ export const Conversation = () => {
             onClearReply={onClearReply}
           />
         )}
-        <MessageBox handleSubmit={handleSubmit} />
+
+        <MessageBox
+          key={selectedConversationId}
+          handleSubmit={handleSubmit}
+        />
       </div>
     </div>
   );
