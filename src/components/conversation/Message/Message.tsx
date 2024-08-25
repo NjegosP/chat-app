@@ -3,6 +3,7 @@ import { memo, useState } from 'react';
 import { useConversationContext } from '../../../contexts/ConversationContext';
 import type { MessageType } from '../../../data/data';
 import { ReplyMessage } from '../Reply/ReplyBox';
+import { isEmojiOnly } from '../../../utils/helpers';
 
 type Props = {
   message: MessageType;
@@ -85,10 +86,3 @@ const ReplyBubble = ({ isHidden, onClick }: { isHidden: boolean; onClick: () => 
 };
 
 export default memo(Message);
-
-const isEmojiOnly = (string) => {
-  const stringToTest = string.replace(/ /g, '');
-  const emojiRegex =
-    /^(?:\p{Emoji}(?:\p{Emoji_Modifier}|\u{FE0F}|\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?(?:\u{200D}\p{Emoji}(?:\p{Emoji_Modifier}|\u{FE0F}|\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?)*)$/u;
-  return emojiRegex.test(stringToTest) && Number.isNaN(Number(stringToTest));
-};
