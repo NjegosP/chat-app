@@ -4,7 +4,7 @@ import { Contact } from './ContactItem/Contact';
 export const Contacts = () => {
   const { contacts, isLoading } = useContacts();
 
-  if (isLoading) return null;
+  if (isLoading) return <p>Loading ...</p>;
 
   return (
     <div className="flex-1 w-auto p-3 bg-[#0F172A] sm:min-w-96 ">
