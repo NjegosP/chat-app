@@ -17,6 +17,7 @@ export const Conversation = () => {
   const handleSubmit = (newMessage: MessageType) => {
     if (replyMessage) {
       newMessage.replyMessage = replyMessage;
+      setReplyMessage(null);
     }
     addNewMessage.mutate({ id: selectedContact?.conversationId, messages: [...conversation.messages, newMessage] });
     updateLastMessage.mutate({ conversationId: selectedContact.conversationId, message: newMessage.messageText });
