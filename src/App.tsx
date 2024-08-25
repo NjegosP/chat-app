@@ -1,11 +1,14 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './App.css';
 import Chat from './Chat';
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
-    <div className="flex flex-row min-h-dvh">
+    <QueryClientProvider client={queryClient}>
       <Chat />
-    </div>
+    </QueryClientProvider>
   );
 }
 
