@@ -7,7 +7,7 @@ export const Contacts = () => {
   if (isLoading) return <p>Loading ...</p>;
 
   return (
-    <div className="flex-1 w-auto p-3 bg-[#0F172A] sm:min-w-96 h-screen sticky top-0 overflow-auto">
+    <div className="flex-1 w-auto p-3 bg-[#0F172A] min-w-24 sm:min-w-96 h-screen sticky top-0 overflow-auto">
       {contacts.map((contact) => (
         <ContactItem
           key={contact.userId}
