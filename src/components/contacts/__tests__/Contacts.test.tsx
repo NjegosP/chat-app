@@ -26,6 +26,7 @@ describe('Contacts Component', () => {
     mockUseContacts.mockReturnValue({
       contacts: mockContacts,
       isLoading: false,
+      isSuccess: true,
       updateLastMessage: jest.fn() as unknown as MockUseMutationResult,
     });
 
@@ -47,6 +48,7 @@ describe('Contacts Component', () => {
   test('does not render contacts when loading is true', () => {
     mockUseContacts.mockReturnValueOnce({
       contacts: [],
+      isSuccess: true,
       isLoading: true,
       updateLastMessage: jest.fn() as unknown as MockUseMutationResult,
     });

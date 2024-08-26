@@ -1,18 +1,16 @@
 import { useEffect } from 'react';
-import { useContacts } from './api/hooks/useContacts';
 import { Contacts } from './components/contacts/Contacts';
 import { Conversation } from './components/conversation/Conversation';
 import { useConversationContext } from './contexts/ConversationContext';
+import { useContacts } from './api/hooks/useContacts';
 
 const Chat = () => {
-  const { contacts } = useContacts();
   const { selectedContact, setSelectedContact } = useConversationContext();
+  const { contacts, isSuccess } = useContacts();
 
   useEffect(() => {
-    if (contacts && !selectedContact) {
-      setSelectedContact(contacts[0]);
-    }
-  }, [contacts]);
+    setSelectedContact(selectedContact ?? contacts?.[0]);
+  }, [isSuccess]);
 
   return (
     <div className="flex flex-row min-h-dvh">

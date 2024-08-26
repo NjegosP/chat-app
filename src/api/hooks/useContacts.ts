@@ -3,7 +3,11 @@ import { contactData, ContactType } from '../../data/data';
 
 export const useContacts = () => {
   const queryClient = useQueryClient();
-  const { data: contacts, isLoading } = useQuery({
+  const {
+    data: contacts,
+    isLoading,
+    isSuccess,
+  } = useQuery({
     queryKey: ['contacts'],
     queryFn: () => contactData,
     staleTime: Infinity,
@@ -27,5 +31,5 @@ export const useContacts = () => {
     },
   });
 
-  return { contacts, isLoading, updateLastMessage };
+  return { contacts, isLoading, isSuccess, updateLastMessage };
 };
